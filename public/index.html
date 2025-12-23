@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project Isekai - Progression System</title>
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <!-- Solo Leveling style font -->
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Exo+2:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Loading screen with Solo Leveling aesthetic */
+        body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            font-family: 'Exo 2', sans-serif;
+            background: #0a0a1a;
+            color: #00f3ff;
+        }
+        
+        #app-loading {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(135deg, #0a0a1a 0%, #15152b 100%);
+            z-index: 9999;
+        }
+        
+        .loading-logo {
+            font-family: 'Orbitron', monospace;
+            font-size: 3.5rem;
+            font-weight: 900;
+            margin-bottom: 2rem;
+            background: linear-gradient(90deg, #00f3ff, #9d4edd, #ff375f);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: 0 0 30px rgba(0, 243, 255, 0.3);
+            letter-spacing: 3px;
+        }
+        
+        .loading-subtitle {
+            font-family: 'Exo 2', sans-serif;
+            font-size: 1.2rem;
+            color: #8a8aff;
+            margin-bottom: 3rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+        
+        .loading-bar {
+            width: 300px;
+            height: 4px;
+            background: rgba(0, 243, 255, 0.1);
+            border-radius: 2px;
+            overflow: hidden;
+            margin-bottom: 1rem;
+        }
+        
+        .loading-progress {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, #00f3ff, #9d4edd);
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+        
+        .loading-text {
+            font-family: 'Exo 2', sans-serif;
+            font-size: 0.9rem;
+            color: #6d6dff;
+            letter-spacing: 1px;
+        }
+        
+        .system-notice {
+            position: absolute;
+            bottom: 2rem;
+            font-size: 0.8rem;
+            color: #4a4aff;
+            text-align: center;
+            padding: 0 2rem;
+            max-width: 600px;
+        }
+        
+        .glitch {
+            animation: text-glitch 0.5s infinite;
+        }
+        
+        @keyframes text-glitch {
+            0% { opacity: 1; transform: translateX(0); }
+            50% { opacity: 0.8; transform: translateX(-1px); }
+            100% { opacity: 1; transform: translateX(1px); }
+        }
+    </style>
+</head>
+<body>
+    <!-- Loading Screen -->
+    <div id="app-loading">
+        <div class="loading-logo glitch">PROJECT ISEKAI</div>
+        <div class="loading-subtitle">SYSTEM INITIALIZATION</div>
+        <div class="loading-bar">
+            <div class="loading-progress" id="loading-progress"></div>
+        </div>
+        <div class="loading-text" id="loading-status">Loading core systems...</div>
+        <div class="system-notice">
+            [WARNING: System contains progression fantasy mechanics. Constant training required for advancement.]
+        </div>
+    </div>
+
+    <!-- Vue App Mount Point -->
+    <div id="app"></div>
+
+    <script type="module" src="/src/main.js"></script>
+    
+    <script>
+        // Loading screen animation
+        document.addEventListener('DOMContentLoaded', () => {
+            const progressBar = document.getElementById('loading-progress');
+            const statusText = document.getElementById('loading-status');
+            const loadingStages = [
+                { progress: 15, text: 'Initializing Player Database...' },
+                { progress: 30, text: 'Loading Gauntlet Protocols...' },
+                { progress: 50, text: 'Synchronizing Constellation Network...' },
+                { progress: 70, text: 'Calibrating Dungeon Systems...' },
+                { progress: 85, text: 'Establishing Shop Connection...' },
+                { progress: 95, text: 'Finalizing System Interface...' },
+                { progress: 100, text: 'READY' }
+            ];
+            
+            let currentStage = 0;
+            
+            function updateLoading() {
+                if (currentStage < loadingStages.length) {
+                    const stage = loadingStages[currentStage];
+                    progressBar.style.width = stage.progress + '%';
+                    statusText.textContent = stage.text;
+                    currentStage++;
+                    
+                    if (currentStage < loadingStages.length) {
+                        setTimeout(updateLoading, 300 + Math.random() * 400);
+                    } else {
+                        // Hide loading screen when Vue is ready
+                        setTimeout(() => {
+                            document.getElementById('app-loading').style.opacity = '0';
+                            setTimeout(() => {
+                                document.getElementById('app-loading').style.display = 'none';
+                            }, 500);
+                        }, 500);
+                    }
+                }
+            }
+            
+            setTimeout(updateLoading, 500);
+        });
+    </script>
+</body>
+</html>

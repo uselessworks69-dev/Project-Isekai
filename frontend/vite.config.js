@@ -4,19 +4,14 @@ import { resolve } from 'path'
 
 export default defineConfig({
   plugins: [vue()],
-  root: '.',         // <-- frontend folder as root
-  base: './',        // <-- ensures relative paths in build
+  root: '.',      // IMPORTANT: this folder is root
+  base: './',     // relative paths for static deploy
   resolve: {
-    alias: {
-      '@': resolve(__dirname, 'src')
-    }
+    alias: { '@': resolve(__dirname, 'src') }
   },
   css: {
     postcss: {
-      plugins: [
-        require('tailwindcss'),
-        require('autoprefixer')
-      ]
+      plugins: [require('tailwindcss'), require('autoprefixer')]
     }
   }
 })

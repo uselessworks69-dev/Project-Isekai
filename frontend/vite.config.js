@@ -4,6 +4,8 @@ import { resolve } from 'path'
 
 export default defineConfig({
   plugins: [vue()],
+  root: '.',         // <-- frontend folder as root
+  base: './',        // <-- ensures relative paths in build
   resolve: {
     alias: {
       '@': resolve(__dirname, 'src')

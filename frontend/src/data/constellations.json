@@ -1,15 +1,28 @@
 {
-  "constellations": [
+  "canonicalConstellations": [
     {
       "id": "naruto",
       "name": "Naruto Uzumaki",
       "title": "The One Who Refused to Be Left Behind",
       "rarity": "Rare",
       "primaryAttribute": "AGI",
-      "description": "A constellation born from relentless perseverance and the will to never give up, no matter how many times one falls.",
+      "description": "A constellation born from relentless perseverance and the will to never give up, no matter how many times one falls. Its light shines brightest in moments of comeback.",
       "triggerConditions": [
-        {"type": "comeback", "threshold": 3, "description": "Record 3 consecutive failures followed by a major success"},
-        {"type": "persistence", "threshold": 14, "description": "14+ consecutive days of activity without leaderboard interaction"}
+        {
+          "type": "comeback_spike",
+          "threshold": 3,
+          "description": "Record 3 consecutive failures followed by a major success (dungeon clear or promotion)"
+        },
+        {
+          "type": "persistence",
+          "threshold": 14,
+          "description": "14+ consecutive days of activity without leaderboard interaction or flexing"
+        },
+        {
+          "type": "underdog_victory",
+          "threshold": 1,
+          "description": "Clear a dungeon while at 20% or less health/energy"
+        }
       ],
       "effects": [
         {
@@ -26,7 +39,15 @@
           "target": "global",
           "baseValue": 2,
           "scalingFactor": 0.5,
-          "description": "Small XP bonus during sponsored dungeons"
+          "description": "Small XP bonus during sponsored dungeons (CL × 0.5%)"
+        },
+        {
+          "name": "NeverGiveUp",
+          "type": "retry_chance",
+          "target": "dungeon",
+          "baseValue": 5,
+          "scalingFactor": 2,
+          "description": "Chance to get one free retry on failed dungeon (CL × 2%)"
         }
       ],
       "tasks": [
@@ -35,18 +56,41 @@
           "name": "Comeback Clear",
           "description": "Clear a dungeon after failing it twice before",
           "baseReward": 200,
-          "clMultiplier": 0.08
+          "clMultiplier": 0.08,
+          "rarity": "Common",
+          "requirements": [
+            "fail_dungeon_twice",
+            "clear_same_dungeon"
+          ]
         },
         {
           "id": "naruto_giveback",
           "name": "Give-Back Run",
           "description": "Forfeit loot on a successful dungeon clear",
           "baseReward": 150,
-          "clMultiplier": 0.08
+          "clMultiplier": 0.08,
+          "rarity": "Uncommon",
+          "requirements": [
+            "clear_dungeon",
+            "forfeit_loot"
+          ]
+        },
+        {
+          "id": "naruto_support",
+          "name": "Group Support",
+          "description": "Complete a challenge while another player is spectating",
+          "baseReward": 120,
+          "clMultiplier": 0.08,
+          "rarity": "Common",
+          "requirements": [
+            "spectator_present",
+            "complete_challenge"
+          ]
         }
       ],
       "symbol": "🌀",
-      "color": "#FF6B00"
+      "color": "#FF6B00",
+      "quote": "I'm not gonna run away anymore... I'm not gonna go back on my word... that is my ninja way!"
     },
     {
       "id": "goku",
@@ -54,10 +98,23 @@
       "title": "The One Who Breaks His Limit Again and Again",
       "rarity": "Rare",
       "primaryAttribute": "STR",
-      "description": "A constellation representing boundless potential and the constant pursuit of greater heights through rigorous training.",
+      "description": "A constellation representing boundless potential and the constant pursuit of greater heights through rigorous training. Its energy signature spikes during moments of突破 (breakthrough).",
       "triggerConditions": [
-        {"type": "pr_streak", "threshold": 3, "description": "Set personal records in 3 separate training cycles"},
-        {"type": "limit_break", "threshold": 1, "description": "Fail a challenge then immediately succeed on retry"}
+        {
+          "type": "pr_streak",
+          "threshold": 3,
+          "description": "Set personal records in 3 separate training cycles within 7 days"
+        },
+        {
+          "type": "limit_break",
+          "threshold": 1,
+          "description": "Fail a challenge then immediately succeed on retry with 50% better performance"
+        },
+        {
+          "type": "training_marathon",
+          "threshold": 5,
+          "description": "Complete 5+ challenges in a single session"
+        }
       ],
       "effects": [
         {
@@ -71,10 +128,18 @@
         {
           "name": "ZenkaiBoost",
           "type": "recovery_boost",
-          "target": "health",
+          "target": "stamina",
           "baseValue": 5,
           "scalingFactor": 1,
-          "description": "Slightly faster recovery after failed attempts"
+          "description": "Slightly faster recovery after failed attempts (CL × 1%)"
+        },
+        {
+          "name": "KamehamehaFocus",
+          "type": "focus_bonus",
+          "target": "form",
+          "baseValue": 3,
+          "scalingFactor": 0.5,
+          "description": "Reduced form-break chance during critical moments"
         }
       ],
       "tasks": [
@@ -83,15 +148,636 @@
           "name": "PR During Pressure",
           "description": "Set a personal record during a dungeon run",
           "baseReward": 400,
-          "clMultiplier": 0.08
+          "clMultiplier": 0.08,
+          "rarity": "Rare",
+          "requirements": [
+            "set_personal_record",
+            "during_dungeon"
+          ]
+        },
+        {
+          "id": "goku_extra",
+          "name": "Extra Boss Attempt",
+          "description": "Attempt a boss stage one level above your current",
+          "baseReward": 500,
+          "clMultiplier": 0.08,
+          "rarity": "VeryRare",
+          "requirements": [
+            "attempt_higher_boss",
+            "complete_attempt"
+          ]
+        },
+        {
+          "id": "goku_repeat",
+          "name": "Repeat Breaker",
+          "description": "Break the same personal record twice in a week",
+          "baseReward": 650,
+          "clMultiplier": 0.08,
+          "rarity": "Rare",
+          "requirements": [
+            "break_pr",
+            "break_same_pr_again"
+          ]
         }
       ],
       "symbol": "⚡",
-      "color": "#FFD700"
+      "color": "#FFD700",
+      "quote": "There's always someone stronger, that's why you have to keep training!"
     },
-    // Add Levi, Itachi, Light, Ayanokoji, Saitama, Eren here...
+    {
+      "id": "levi",
+      "name": "Levi Ackerman",
+      "title": "The One Who Stands Alone on the Battlefield",
+      "rarity": "VeryRare",
+      "primaryAttribute": "INT",
+      "description": "A constellation of surgical precision and flawless execution. It values perfection over power, efficiency over extravagance.",
+      "triggerConditions": [
+        {
+          "type": "perfect_promotion",
+          "threshold": 1,
+          "description": "Clear a Promotion Dungeon with zero form breaks, no consumables"
+        },
+        {
+          "type": "flawless_series",
+          "threshold": 5,
+          "description": "5 consecutive dungeon clears with perfect form scores"
+        },
+        {
+          "type": "solo_achievement",
+          "threshold": 1,
+          "description": "Achieve a major milestone without any constellation assistance"
+        }
+      ],
+      "effects": [
+        {
+          "name": "SurgicalFavor",
+          "type": "stat_boost",
+          "target": "int",
+          "baseValue": 1,
+          "scalingFactor": 0.4,
+          "description": "Next two sponsored dungeons can convert boss bonus outcomes into +1 INT each"
+        },
+        {
+          "name": "PerfectForm",
+          "type": "form_tolerance",
+          "target": "global",
+          "baseValue": 5,
+          "scalingFactor": 1,
+          "description": "Slightly wider form-break tolerance (CL × 1%)"
+        },
+        {
+          "name": "BattlefieldAwareness",
+          "type": "dungeon_insight",
+          "target": "information",
+          "baseValue": 10,
+          "scalingFactor": 2,
+          "description": "Reveals one dungeon requirement before attempt"
+        }
+      ],
+      "tasks": [
+        {
+          "id": "levi_perfect",
+          "name": "Perfect Promotion",
+          "description": "Clear a promotion dungeon with zero form breaks",
+          "baseReward": 800,
+          "clMultiplier": 0.08,
+          "rarity": "VeryRare",
+          "requirements": [
+            "promotion_dungeon",
+            "zero_form_breaks"
+          ]
+        },
+        {
+          "id": "levi_surgical",
+          "name": "Surgical Week",
+          "description": "Complete 7 challenges with 95%+ form score",
+          "baseReward": 450,
+          "clMultiplier": 0.08,
+          "rarity": "Rare",
+          "requirements": [
+            "high_form_score",
+            "seven_days"
+          ]
+        },
+        {
+          "id": "levi_clean",
+          "name": "Clean Conversion",
+          "description": "Convert 3 boss bonuses in a single session",
+          "baseReward": 600,
+          "clMultiplier": 0.08,
+          "rarity": "VeryRare",
+          "requirements": [
+            "multiple_boss_bonuses",
+            "single_session"
+          ]
+        }
+      ],
+      "symbol": "✂️",
+      "color": "#00B4FF",
+      "quote": "Make a decision... don't regret it. That's all you can do."
+    },
+    {
+      "id": "itachi",
+      "name": "Itachi Uchiha",
+      "title": "The One Who Bore the World in Silence",
+      "rarity": "VeryRare",
+      "primaryAttribute": "VIT",
+      "description": "A constellation of sacrifice and long-term planning. It rewards those who play the long game, who endure suffering for greater purpose.",
+      "triggerConditions": [
+        {
+          "type": "sacrifice_made",
+          "threshold": 2,
+          "description": "Forfeit loot on two consecutive assigned dungeon clears"
+        },
+        {
+          "type": "silent_grind",
+          "threshold": 14,
+          "description": "14+ consecutive days without leaderboard interactions or炫耀 (showing off)"
+        },
+        {
+          "type": "delayed_gratification",
+          "threshold": 3,
+          "description": "Save 3+ dungeon keys without using them for 7 days"
+        }
+      ],
+      "effects": [
+        {
+          "name": "LongGameFavor",
+          "type": "stat_boost",
+          "target": "vit",
+          "baseValue": 1,
+          "scalingFactor": 0.5,
+          "description": "Occasionally convert a sponsored challenge clear into +1 VIT"
+        },
+        {
+          "name": "SilentEndurance",
+          "type": "stamina_boost",
+          "target": "endurance",
+          "baseValue": 10,
+          "scalingFactor": 2,
+          "description": "Increased stamina for endurance-based challenges"
+        },
+        {
+          "name": "SacrificialProtection",
+          "type": "damage_reduction",
+          "target": "penalty",
+          "baseValue": 15,
+          "scalingFactor": 3,
+          "description": "Reduced penalty severity from failures (CL × 3%)"
+        }
+      ],
+      "tasks": [
+        {
+          "id": "itachi_sacrifice",
+          "name": "Sacrifice Twice",
+          "description": "Forfeit loot on two successful dungeon clears",
+          "baseReward": 500,
+          "clMultiplier": 0.08,
+          "rarity": "Rare",
+          "requirements": [
+            "clear_dungeon",
+            "forfeit_loot",
+            "repeat"
+          ]
+        },
+        {
+          "id": "itachi_quiet",
+          "name": "Long Quiet Grind",
+          "description": "30 days without leaderboard posts or炫耀",
+          "baseReward": 700,
+          "clMultiplier": 0.08,
+          "rarity": "VeryRare",
+          "requirements": [
+            "no_leaderboard",
+            "thirty_days"
+          ]
+        },
+        {
+          "id": "itachi_story",
+          "name": "Story Token Exchange",
+          "description": "Exchange collected story fragments for SC",
+          "baseReward": 300,
+          "clMultiplier": 0.08,
+          "rarity": "Common",
+          "requirements": [
+            "collect_fragments",
+            "exchange_tokens"
+          ]
+        }
+      ],
+      "symbol": "👁️",
+      "color": "#8B0000",
+      "quote": "People live their lives bound by what they accept as correct and true. That's how they define reality."
+    },
+    {
+      "id": "light",
+      "name": "Light Yagami",
+      "title": "The One Who Sought to Become God",
+      "rarity": "Rare",
+      "primaryAttribute": "INT",
+      "description": "A constellation of brilliant strategy and ruthless efficiency. It values intelligence over strength, planning over brute force.",
+      "triggerConditions": [
+        {
+          "type": "optimization",
+          "threshold": 30,
+          "description": "Clear assigned dungeon with ≥30% time/reps reduction through legal optimization"
+        },
+        {
+          "type": "perfect_strategy",
+          "threshold": 5,
+          "description": "5 consecutive dungeon clears without taking any avoidable damage/penalties"
+        },
+        {
+          "type": "calculated_risk",
+          "threshold": 1,
+          "description": "Attempt a promotion dungeon while under-leveled and succeed"
+        }
+      ],
+      "effects": [
+        {
+          "name": "RuleBendToken",
+          "type": "utility",
+          "target": "dungeon",
+          "baseValue": 1,
+          "scalingFactor": 0.1,
+          "description": "One reusable token to reroll assigned archetype"
+        },
+        {
+          "name": "StrategicMind",
+          "type": "xp_boost",
+          "target": "int_xp",
+          "baseValue": 10,
+          "scalingFactor": 2,
+          "description": "Bonus INT XP from optimized clears"
+        },
+        {
+          "name": "DeathNoteClarity",
+          "type": "information",
+          "target": "dungeon",
+          "baseValue": 20,
+          "scalingFactor": 3,
+          "description": "Reveals dungeon weaknesses before attempt"
+        }
+      ],
+      "tasks": [
+        {
+          "id": "light_optimize",
+          "name": "Optimization Win",
+          "description": "Clear dungeon with 30%+ efficiency gain",
+          "baseReward": 450,
+          "clMultiplier": 0.08,
+          "rarity": "Rare",
+          "requirements": [
+            "efficient_clear",
+            "measured_improvement"
+          ]
+        },
+        {
+          "id": "light_reroll",
+          "name": "Strategic Reroll",
+          "description": "Successfully clear dungeon after using reroll token",
+          "baseReward": 350,
+          "clMultiplier": 0.08,
+          "rarity": "Uncommon",
+          "requirements": [
+            "use_reroll",
+            "clear_dungeon"
+          ]
+        },
+        {
+          "id": "light_gamble",
+          "name": "Calculated Gamble",
+          "description": "Attempt promotion while 2+ levels below recommended",
+          "baseReward": 600,
+          "clMultiplier": 0.08,
+          "rarity": "VeryRare",
+          "requirements": [
+            "underleveled",
+            "promotion_attempt"
+          ]
+        }
+      ],
+      "symbol": "📓",
+      "color": "#FF0000",
+      "quote": "I am justice! I protect the innocent and those who fear evil. I'm the one who will become the god of this new world!"
+    },
+    {
+      "id": "ayanokoji",
+      "name": "Ayanokoji Kiyotaka",
+      "title": "The One Who Hid His True Depth",
+      "rarity": "VeryRare",
+      "primaryAttribute": "SEN",
+      "description": "A constellation of hidden potential and calculated underperformance. It rewards those who mask their true abilities, who reveal power only when necessary.",
+      "triggerConditions": [
+        {
+          "type": "hidden_spike",
+          "threshold": 4,
+          "description": "Underperform for 4 key-cycles then spike with perfect Promotion/Gravity dungeon clear"
+        },
+        {
+          "type": "controlled_release",
+          "threshold": 50,
+          "description": "Maintain exactly 50-60% performance for 10+ challenges then release 100%"
+        },
+        {
+          "type": "unnoticed_mastery",
+          "threshold": 1,
+          "description": "Master a gauntlet stage without ever failing it publicly"
+        }
+      ],
+      "effects": [
+        {
+          "name": "HiddenReserve",
+          "type": "utility",
+          "target": "cosmetic",
+          "baseValue": 1,
+          "scalingFactor": 0.1,
+          "description": "Shield one sponsored-dungeon clear from leaderboards"
+        },
+        {
+          "name": "PerfectControl",
+          "type": "penalty_negation",
+          "target": "failure",
+          "baseValue": 1,
+          "scalingFactor": 0.2,
+          "description": "First-use penalty-negation on next sponsored-dungeon fail"
+        },
+        {
+          "name": "TrueDepth",
+          "type": "stat_boost",
+          "target": "sen",
+          "baseValue": 1,
+          "scalingFactor": 0.3,
+          "description": "Grant +1 SEN on successful hidden reserve use"
+        }
+      ],
+      "tasks": [
+        {
+          "id": "ayanokoji_concealed",
+          "name": "Concealed Spike",
+          "description": "Spike performance after period of underperformance",
+          "baseReward": 700,
+          "clMultiplier": 0.08,
+          "rarity": "VeryRare",
+          "requirements": [
+            "underperform_phase",
+            "performance_spike"
+          ]
+        },
+        {
+          "id": "ayanokoji_invisible",
+          "name": "Invisible Assist",
+          "description": "Help another player without them knowing",
+          "baseReward": 300,
+          "clMultiplier": 0.08,
+          "rarity": "Common",
+          "requirements": [
+            "anonymous_assist",
+            "player_progress"
+          ]
+        },
+        {
+          "id": "ayanokoji_blind",
+          "name": "Blind Mastery",
+          "description": "Master stage without seeing others' attempts",
+          "baseReward": 550,
+          "clMultiplier": 0.08,
+          "rarity": "Rare",
+          "requirements": [
+            "no_comparison",
+            "stage_mastery"
+          ]
+        }
+      ],
+      "symbol": "🎭",
+      "color": "#2E8B57",
+      "quote": "I don't particularly like or dislike anything. If I have to say, I like people who are useful to me."
+    },
+    {
+      "id": "saitama",
+      "name": "Saitama",
+      "title": "The One Who Trained When No One Watched",
+      "rarity": "Legendary",
+      "primaryAttribute": "STR",
+      "description": "A constellation of absurd, almost boring consistency. It represents power achieved through simple, relentless daily effort without recognition.",
+      "triggerConditions": [
+        {
+          "type": "extreme_consistency",
+          "threshold": 180,
+          "description": "180 consecutive days of training without skipping, flexing, or leaderboard posting"
+        },
+        {
+          "type": "boring_mastery",
+          "threshold": 10,
+          "description": "Master 10+ gauntlet stages with zero excitement or celebration"
+        },
+        {
+          "type": "effortless_victory",
+          "threshold": 5,
+          "description": "5+ dungeon clears with 100% performance but zero emotional response"
+        }
+      ],
+      "effects": [
+        {
+          "name": "MonolithFavor",
+          "type": "cosmetic",
+          "target": "appearance",
+          "baseValue": 1,
+          "scalingFactor": 0.1,
+          "description": "Cosmetic bald aura at higher CL"
+        },
+        {
+          "name": "SeriousSeries",
+          "type": "stat_boost",
+          "target": "str",
+          "baseValue": 1,
+          "scalingFactor": 0.2,
+          "description": "Once every 30 sponsored-dungeons allow conversion of one boss bonus into +1 STR"
+        },
+        {
+          "name": "BoringPower",
+          "type": "damage_ignore",
+          "target": "penalty",
+          "baseValue": 25,
+          "scalingFactor": 5,
+          "description": "Ignore minor penalties from boredom/fatigue"
+        }
+      ],
+      "tasks": [
+        {
+          "id": "saitama_consistency",
+          "name": "Invisible Consistency",
+          "description": "100 days without skipping training",
+          "baseReward": 2500,
+          "clMultiplier": 0.08,
+          "rarity": "Legendary",
+          "requirements": [
+            "daily_training",
+            "hundred_days"
+          ]
+        },
+        {
+          "id": "saitama_noflex",
+          "name": "No-Flex Run",
+          "description": "Complete major milestone without telling anyone",
+          "baseReward": 1200,
+          "clMultiplier": 0.08,
+          "rarity": "VeryRare",
+          "requirements": [
+            "major_milestone",
+            "no_announcement"
+          ]
+        },
+        {
+          "id": "saitama_myth",
+          "name": "Bare Minimum Myth",
+          "description": "Achieve SSS rank with minimal visible effort",
+          "baseReward": 3500,
+          "clMultiplier": 0.08,
+          "rarity": "Legendary",
+          "requirements": [
+            "sss_rank",
+            "effortless_appearance"
+          ]
+        }
+      ],
+      "symbol": "💪",
+      "color": "#FFFF00",
+      "quote": "I'm just a guy who's a hero for fun. I trained really hard, that's all."
+    },
+    {
+      "id": "eren",
+      "name": "Eren Yeager",
+      "title": "The One Who Chose to Move Forward",
+      "rarity": "Mythic",
+      "primaryAttribute": "VIT",
+      "description": "A constellation of relentless forward motion and tragic determination. It represents the cost of freedom and the weight of moving forward at any price.",
+      "triggerConditions": [
+        {
+          "type": "after_fall_rise",
+          "threshold": 3,
+          "description": "After 3 auto-forced failures, accept & clear next assigned dungeon"
+        },
+        {
+          "type": "rumbling_determination",
+          "threshold": 10,
+          "description": "10+ consecutive challenges completed while in severe pain/disadvantage"
+        },
+        {
+          "type": "freedom_price",
+          "threshold": 1,
+          "description": "Sacrifice a constellation sponsorship to achieve a personal goal"
+        }
+      ],
+      "effects": [
+        {
+          "name": "PersistenceAid",
+          "type": "utility",
+          "target": "retry",
+          "baseValue": 1,
+          "scalingFactor": 0.1,
+          "description": "First time fail → immediate re-attempt with reduced penalty"
+        },
+        {
+          "name": "ForwardMotion",
+          "type": "momentum",
+          "target": "xp",
+          "baseValue": 5,
+          "scalingFactor": 1,
+          "description": "Gain momentum bonus after consecutive days of progress"
+        },
+        {
+          "name": "TitanWill",
+          "type": "stat_boost",
+          "target": "vit",
+          "baseValue": 1,
+          "scalingFactor": 0.4,
+          "description": "Convert failed dungeon boss bonus into +1 VIT on re-attempt success"
+        }
+      ],
+      "tasks": [
+        {
+          "id": "eren_afterfall",
+          "name": "After-Fall Rise",
+          "description": "Clear dungeon immediately after forced failure",
+          "baseReward": 1000,
+          "clMultiplier": 0.08,
+          "rarity": "Mythic",
+          "requirements": [
+            "forced_failure",
+            "immediate_retry_success"
+          ]
+        },
+        {
+          "id": "eren_relentless",
+          "name": "Relentless Push",
+          "description": "10 challenges while under severe debuff",
+          "baseReward": 1500,
+          "clMultiplier": 0.08,
+          "rarity": "VeryRare",
+          "requirements": [
+            "under_debuff",
+            "ten_challenges"
+          ]
+        },
+        {
+          "id": "eren_corruption",
+          "name": "Corruption Bargain",
+          "description": "Accept corrupted constellation for power",
+          "baseReward": 3000,
+          "clMultiplier": 0.08,
+          "rarity": "Mythic",
+          "requirements": [
+            "corrupted_offer",
+            "accept_corruption"
+          ]
+        }
+      ],
+      "symbol": "🦅",
+      "color": "#006400",
+      "quote": "I keep moving forward... until my enemies are destroyed."
+    }
   ],
   "corruptedConstellations": [
+    {
+      "id": "corrupted_naruto",
+      "baseId": "naruto",
+      "name": "Nine-Tails Naruto",
+      "title": "The One Consumed by Rage",
+      "rarity": "Mythic",
+      "primaryAttribute": "AGI",
+      "isCorrupted": true,
+      "description": "Perseverance twisted into obsession, camaraderie into dependency. The light that refused to be left behind now drags others down with it.",
+      "effects": [
+        {
+          "name": "RageSpike",
+          "type": "penalty",
+          "target": "agi_requirement",
+          "baseValue": 40,
+          "scalingFactor": 8,
+          "description": "Requires +40% more stage clears for AGI gains"
+        },
+        {
+          "name": "DependencyCurse",
+          "type": "penalty",
+          "target": "solo_performance",
+          "baseValue": 25,
+          "scalingFactor": 5,
+          "description": "-25% performance when completing challenges alone"
+        },
+        {
+          "name": "BerserkState",
+          "type": "risky_boost",
+          "target": "damage",
+          "baseValue": 30,
+          "scalingFactor": 6,
+          "description": "+30% performance but +50% form-break chance"
+        }
+      ],
+      "symbol": "🌀",
+      "color": "#FF0000",
+      "corruptionEffects": ["increased_agi_requirements", "solo_penalty", "berserk_risk"]
+    },
     {
       "id": "corrupted_goku",
       "baseId": "goku",
@@ -100,7 +786,7 @@
       "rarity": "Mythic",
       "primaryAttribute": "STR",
       "isCorrupted": true,
-      "description": "A twisted reflection that turns growth into destruction, ambition into obsession.",
+      "description": "Limit-breaking turned to limitless destruction. The pursuit of greater heights becomes an obsession with erasing all that stands in the way.",
       "effects": [
         {
           "name": "CorruptedLimit",
@@ -109,10 +795,27 @@
           "baseValue": 50,
           "scalingFactor": 10,
           "description": "Requires +50% more Push/Pull XP for STR gains"
+        },
+        {
+          "name": "ZeroMortals",
+          "type": "penalty",
+          "target": "assistance",
+          "baseValue": 100,
+          "scalingFactor": 0,
+          "description": "No assisted attempts allowed in any challenge"
+        },
+        {
+          "name": "DivinePunishment",
+          "type": "double_or_nothing",
+          "target": "rewards",
+          "baseValue": 2,
+          "scalingFactor": 0.2,
+          "description": "Success grants 2x rewards, failure grants 0x"
         }
       ],
       "symbol": "⚡",
-      "color": "#800080"
+      "color": "#800080",
+      "corruptionEffects": ["increased_str_requirements", "no_assistance", "high_risk_rewards"]
     },
     {
       "id": "corrupted_levi",
@@ -122,7 +825,7 @@
       "rarity": "Mythic",
       "primaryAttribute": "INT",
       "isCorrupted": true,
-      "description": "Precision turned to cruelty, perfectionism to merciless judgment.",
+      "description": "Surgical precision turned to cruelty, perfectionism to merciless judgment. The blade that protected now cuts indiscriminately.",
       "effects": [
         {
           "name": "SurgicalStrike",
@@ -131,11 +834,234 @@
           "baseValue": 0,
           "scalingFactor": -10,
           "description": "Any form-break = stage failure"
+        },
+        {
+          "name": "IsolationCurse",
+          "type": "penalty",
+          "target": "social",
+          "baseValue": 100,
+          "scalingFactor": 0,
+          "description": "Cannot participate in group challenges or receive help"
+        },
+        {
+          "name": "MercilessEye",
+          "type": "information_curse",
+          "target": "dungeon",
+          "baseValue": 100,
+          "scalingFactor": 0,
+          "description": "Dungeon requirements hidden until failure"
         }
       ],
       "symbol": "✂️",
-      "color": "#FF0000"
+      "color": "#000000",
+      "corruptionEffects": ["zero_form_tolerance", "social_isolation", "hidden_requirements"]
+    },
+    {
+      "id": "corrupted_itachi",
+      "baseId": "itachi",
+      "name": "Mad Itachi",
+      "title": "The One Who Forgot the Purpose",
+      "rarity": "Mythic",
+      "primaryAttribute": "VIT",
+      "isCorrupted": true,
+      "description": "Sacrifice without purpose, endurance without goal. The weight borne in silence becomes a crushing burden with no redemption.",
+      "effects": [
+        {
+          "name": "PointlessSacrifice",
+          "type": "penalty",
+          "target": "forfeit",
+          "baseValue": -100,
+          "scalingFactor": -20,
+          "description": "Reward-forfeits no longer beneficial"
+        },
+        {
+          "name": "CrushingBurden",
+          "type": "penalty",
+          "target": "vit_requirement",
+          "baseValue": 25,
+          "scalingFactor": 5,
+          "description": "Requires +25% more Total XP for VIT gains"
+        },
+        {
+          "name": "TsukuyomiTrap",
+          "type": "time_penalty",
+          "target": "recovery",
+          "baseValue": 50,
+          "scalingFactor": 10,
+          "description": "+50% time required between challenge attempts"
+        }
+      ],
+      "symbol": "👁️",
+      "color": "#8A2BE2",
+      "corruptionEffects": ["useless_sacrifice", "increased_vit_requirements", "longer_recovery"]
+    },
+    {
+      "id": "corrupted_light",
+      "baseId": "light",
+      "name": "Kira (Ryuk)",
+      "title": "The One Who Plays God",
+      "rarity": "Mythic",
+      "primaryAttribute": "INT",
+      "isCorrupted": true,
+      "description": "Strategy turned to manipulation, intelligence to god-complex. The Death Note's power corrupts absolutely.",
+      "effects": [
+        {
+          "name": "GodComplex",
+          "type": "penalty",
+          "target": "int_gains",
+          "baseValue": -50,
+          "scalingFactor": -10,
+          "description": "INT gains halved"
+        },
+        {
+          "name": "RyukGamble",
+          "type": "risky_challenge",
+          "target": "optional",
+          "baseValue": 1,
+          "scalingFactor": 0.2,
+          "description": "System injects optional risky challenges with severe penalties"
+        },
+        {
+          "name": "AppleAddiction",
+          "type": "resource_drain",
+          "target": "sc",
+          "baseValue": 20,
+          "scalingFactor": 4,
+          "description": "Lose 20% of SC daily unless completing Ryuk's challenges"
+        }
+      ],
+      "symbol": "📓",
+      "color": "#4B0082",
+      "corruptionEffects": ["halved_int_gains", "forced_risky_challenges", "sc_drain"]
+    },
+    {
+      "id": "corrupted_ayanokoji",
+      "baseId": "ayanokoji",
+      "name": "Null Ayanokoji",
+      "title": "The One Who Erases Himself",
+      "rarity": "Mythic",
+      "primaryAttribute": "SEN",
+      "isCorrupted": true,
+      "description": "Hidden depth turned to emptiness, control to erasure. The perfect tool with no purpose.",
+      "effects": [
+        {
+          "name": "Emptiness",
+          "type": "penalty",
+          "target": "sen_gains",
+          "baseValue": -40,
+          "scalingFactor": -8,
+          "description": "SEN gains slowed (+40% more Core XP needed)"
+        },
+        {
+          "name": "FeedbackNull",
+          "type": "information_penalty",
+          "target": "system",
+          "baseValue": 100,
+          "scalingFactor": 0,
+          "description": "System feedback hidden, causing uncertainty"
+        },
+        {
+          "name": "SelfErase",
+          "type": "progression_penalty",
+          "target": "milestone",
+          "baseValue": 50,
+          "scalingFactor": 10,
+          "description": "50% chance milestones aren't recorded"
+        }
+      ],
+      "symbol": "🎭",
+      "color": "#000000",
+      "corruptionEffects": ["slowed_sen_gains", "hidden_feedback", "unreliable_records"]
+    },
+    {
+      "id": "corrupted_saitama",
+      "baseId": "saitama",
+      "name": "Garou",
+      "title": "The One Who Became Monster",
+      "rarity": "Legendary",
+      "primaryAttribute": "STR",
+      "isCorrupted": true,
+      "description": "Consistency turned to monstrous adaptation, simple power to chaotic evolution. The hero hunter who becomes what he hunts.",
+      "effects": [
+        {
+          "name": "MonsterCaliber",
+          "type": "penalty",
+          "target": "boss_bonus",
+          "baseValue": -1,
+          "scalingFactor": -0.2,
+          "description": "Boss bonuses reduced by 1 tier"
+        },
+        {
+          "name": "AdaptivePunishment",
+          "type": "adaptive_penalty",
+          "target": "weakness",
+          "baseValue": 30,
+          "scalingFactor": 6,
+          "description": "System adapts to exploit your weakest attribute"
+        },
+        {
+          "name": "Monsterization",
+          "type": "risky_evolution",
+          "target": "failure",
+          "baseValue": 20,
+          "scalingFactor": 4,
+          "description": "Failures buff next attempt but stack corruption"
+        }
+      ],
+      "symbol": "🐺",
+      "color": "#8B0000",
+      "corruptionEffects": ["reduced_boss_bonuses", "adaptive_penalties", "failure_corruption"]
+    },
+    {
+      "id": "corrupted_eren",
+      "baseId": "eren",
+      "name": "Eren (Rumbling)",
+      "title": "The One Who Chose Destruction",
+      "rarity": "Mythic",
+      "primaryAttribute": "VIT",
+      "isCorrupted": true,
+      "description": "Forward motion turned to indiscriminate destruction, freedom's cost to everyone's cost. The rumbling cannot be stopped.",
+      "effects": [
+        {
+          "name": "RumblingMomentum",
+          "type": "penalty",
+          "target": "failure",
+          "baseValue": 30,
+          "scalingFactor": 6,
+          "description": "Failures stack 30% harsher penalties"
+        },
+        {
+          "name": "FreedomTax",
+          "type": "resource_penalty",
+          "target": "all",
+          "baseValue": 15,
+          "scalingFactor": 3,
+          "description": "-15% all resource gains (XP, SC, etc.)"
+        },
+        {
+          "name": "TitanCurse",
+          "type": "corruption_acceleration",
+          "target": "meter",
+          "baseValue": 50,
+          "scalingFactor": 10,
+          "description": "Clearing after multiple failures accelerates corruption meter"
+        }
+      ],
+      "symbol": "🦅",
+      "color": "#000000",
+      "corruptionEffects": ["stacking_failure_penalties", "reduced_resource_gains", "corruption_acceleration"]
     }
-    // Add other corrupted versions...
+  ],
+  "constellationLevels": [
+    {"level": 1, "xpRequired": 0, "description": "New Sponsor"},
+    {"level": 2, "xpRequired": 100, "description": "Acknowledged"},
+    {"level": 3, "xpRequired": 300, "description": "Recognized"},
+    {"level": 4, "xpRequired": 600, "description": "Valued"},
+    {"level": 5, "xpRequired": 1000, "description": "Trusted"},
+    {"level": 6, "xpRequired": 1500, "description": "Partner"},
+    {"level": 7, "xpRequired": 2100, "description": "Ally"},
+    {"level": 8, "xpRequired": 2800, "description": "Confidant"},
+    {"level": 9, "xpRequired": 3600, "description": "Champion"},
+    {"level": 10, "xpRequired": 4500, "description": "Legend"}
   ]
         }

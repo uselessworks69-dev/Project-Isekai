@@ -1,0 +1,113 @@
+{
+  "consumables": [
+    {
+      "id": "rest_pass",
+      "name": "Rest-Pass (Single)",
+      "description": "Grants +60s rest once in a Promotion challenge. Promotion-only consumable.",
+      "cost": 800,
+      "type": "consumable",
+      "rarity": "Rare",
+      "effect": "addRestTime",
+      "effectValue": 60,
+      "maxStack": 5,
+      "usableIn": ["promotion"]
+    },
+    {
+      "id": "dungeon_reroll",
+      "name": "Dungeon Reroll Token",
+      "description": "Reroll the next assigned dungeon archetype once.",
+      "cost": 600,
+      "type": "consumable",
+      "rarity": "Uncommon",
+      "effect": "rerollDungeon",
+      "maxStack": 3
+    },
+    {
+      "id": "penalty_negation",
+      "name": "Penalty Negation (One-time)",
+      "description": "Negates one minor penalty on the next failed dungeon attempt.",
+      "cost": 900,
+      "type": "consumable",
+      "rarity": "Rare",
+      "effect": "negatePenalty",
+      "maxStack": 2
+    },
+    {
+      "id": "retry_token",
+      "name": "Retry Token",
+      "description": "Immediate one retry for a failed assigned dungeon (not valid for Promotion).",
+      "cost": 1200,
+      "type": "consumable",
+      "rarity": "Epic",
+      "effect": "retryDungeon",
+      "maxStack": 1
+    }
+  ],
+  "cosmetics": [
+    {
+      "id": "title_redeemed",
+      "name": "Title: The Redeemed",
+      "description": "Cosmetic title earned after completing the Purification Arc.",
+      "cost": 300,
+      "type": "cosmetic",
+      "rarity": "Legendary",
+      "unlockCondition": "purification_complete"
+    },
+    {
+      "id": "aura_monarch",
+      "name": "Monarch Aura",
+      "description": "Golden aura effect inspired by Solo Leveling's Monarchs.",
+      "cost": 1500,
+      "type": "cosmetic",
+      "rarity": "Epic",
+      "effect": "visualAura"
+    },
+    {
+      "id": "hidden_clear",
+      "name": "Hidden Clear (Cosmetic)",
+      "description": "Hide a sponsored-dungeon clear from leaderboards.",
+      "cost": 2000,
+      "type": "cosmetic",
+      "rarity": "VeryRare",
+      "effect": "hideFromLeaderboard",
+      "maxUses": 3
+    }
+  ],
+  "permanent": [
+    {
+      "id": "ascension_perk_slot",
+      "name": "Ascension Perk Slot",
+      "description": "Unlocks an additional perk slot for your next ascension.",
+      "cost": 5000,
+      "type": "permanent",
+      "rarity": "Legendary",
+      "effect": "addPerkSlot",
+      "purchaseLimit": 1,
+      "requirement": "post_ascension"
+    },
+    {
+      "id": "constellation_favor",
+      "name": "Constellation Favor Auction",
+      "description": "Temporary single-use access to a minor constellation perk.",
+      "cost": 3000,
+      "type": "permanent",
+      "rarity": "Mythic",
+      "effect": "temporaryPerk",
+      "duration": 168,
+      "durationUnit": "hours"
+    }
+  ],
+  "special": [
+    {
+      "id": "purification_starter",
+      "name": "Purification Arc Starter Kit",
+      "description": "Reduces the initial sacrifice cost by 20% when starting the Purification Arc.",
+      "cost": 2500,
+      "type": "special",
+      "rarity": "Mythic",
+      "requirement": "fallen_state",
+      "effect": "reduceSacrifice",
+      "effectValue": 20
+    }
+  ]
+    }

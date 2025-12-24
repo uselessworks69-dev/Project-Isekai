@@ -1,0 +1,141 @@
+{
+  "constellations": [
+    {
+      "id": "naruto",
+      "name": "Naruto Uzumaki",
+      "title": "The One Who Refused to Be Left Behind",
+      "rarity": "Rare",
+      "primaryAttribute": "AGI",
+      "description": "A constellation born from relentless perseverance and the will to never give up, no matter how many times one falls.",
+      "triggerConditions": [
+        {"type": "comeback", "threshold": 3, "description": "Record 3 consecutive failures followed by a major success"},
+        {"type": "persistence", "threshold": 14, "description": "14+ consecutive days of activity without leaderboard interaction"}
+      ],
+      "effects": [
+        {
+          "name": "ComebackSpike",
+          "type": "stat_boost",
+          "target": "agi",
+          "baseValue": 1,
+          "scalingFactor": 0.5,
+          "description": "Every 3 sponsored-dungeons, convert one boss bonus into +1 AGI stage-credit"
+        },
+        {
+          "name": "PerseveranceAura",
+          "type": "xp_modifier",
+          "target": "global",
+          "baseValue": 2,
+          "scalingFactor": 0.5,
+          "description": "Small XP bonus during sponsored dungeons"
+        }
+      ],
+      "tasks": [
+        {
+          "id": "naruto_comeback",
+          "name": "Comeback Clear",
+          "description": "Clear a dungeon after failing it twice before",
+          "baseReward": 200,
+          "clMultiplier": 0.08
+        },
+        {
+          "id": "naruto_giveback",
+          "name": "Give-Back Run",
+          "description": "Forfeit loot on a successful dungeon clear",
+          "baseReward": 150,
+          "clMultiplier": 0.08
+        }
+      ],
+      "symbol": "🌀",
+      "color": "#FF6B00"
+    },
+    {
+      "id": "goku",
+      "name": "Son Goku",
+      "title": "The One Who Breaks His Limit Again and Again",
+      "rarity": "Rare",
+      "primaryAttribute": "STR",
+      "description": "A constellation representing boundless potential and the constant pursuit of greater heights through rigorous training.",
+      "triggerConditions": [
+        {"type": "pr_streak", "threshold": 3, "description": "Set personal records in 3 separate training cycles"},
+        {"type": "limit_break", "threshold": 1, "description": "Fail a challenge then immediately succeed on retry"}
+      ],
+      "effects": [
+        {
+          "name": "LimitBreak",
+          "type": "stat_boost",
+          "target": "str",
+          "baseValue": 1,
+          "scalingFactor": 0.3,
+          "description": "Once per sponsored-dungeon, attempt a boss test one stage above current"
+        },
+        {
+          "name": "ZenkaiBoost",
+          "type": "recovery_boost",
+          "target": "health",
+          "baseValue": 5,
+          "scalingFactor": 1,
+          "description": "Slightly faster recovery after failed attempts"
+        }
+      ],
+      "tasks": [
+        {
+          "id": "goku_pr",
+          "name": "PR During Pressure",
+          "description": "Set a personal record during a dungeon run",
+          "baseReward": 400,
+          "clMultiplier": 0.08
+        }
+      ],
+      "symbol": "⚡",
+      "color": "#FFD700"
+    },
+    // Add Levi, Itachi, Light, Ayanokoji, Saitama, Eren here...
+  ],
+  "corruptedConstellations": [
+    {
+      "id": "corrupted_goku",
+      "baseId": "goku",
+      "name": "Black Goku",
+      "title": "The One Who Seeks Erasure",
+      "rarity": "Mythic",
+      "primaryAttribute": "STR",
+      "isCorrupted": true,
+      "description": "A twisted reflection that turns growth into destruction, ambition into obsession.",
+      "effects": [
+        {
+          "name": "CorruptedLimit",
+          "type": "penalty",
+          "target": "str_requirement",
+          "baseValue": 50,
+          "scalingFactor": 10,
+          "description": "Requires +50% more Push/Pull XP for STR gains"
+        }
+      ],
+      "symbol": "⚡",
+      "color": "#800080"
+    },
+    {
+      "id": "corrupted_levi",
+      "baseId": "levi",
+      "name": "Fallen Levi",
+      "title": "The One Who Cuts All Bonds",
+      "rarity": "Mythic",
+      "primaryAttribute": "INT",
+      "isCorrupted": true,
+      "description": "Precision turned to cruelty, perfectionism to merciless judgment.",
+      "effects": [
+        {
+          "name": "SurgicalStrike",
+          "type": "penalty",
+          "target": "form_tolerance",
+          "baseValue": 0,
+          "scalingFactor": -10,
+          "description": "Any form-break = stage failure"
+        }
+      ],
+      "symbol": "✂️",
+      "color": "#FF0000"
+    }
+    // Add other corrupted versions...
+  ]
+        }

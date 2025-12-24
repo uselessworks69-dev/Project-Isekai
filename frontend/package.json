@@ -1,7 +1,6 @@
 {
-  "name": "project-isekai-webapp",
-  "version": "0.2.0",
-  "description": "Web interface for Project Isekai progression system",
+  "name": "project-isekai-frontend",
+  "version": "0.1.0",
   "private": true,
   "scripts": {
     "dev": "vite",
@@ -9,16 +8,12 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "vue": "^3.4.0",
-    "pinia": "^2.1.0",
-    "uuid": "^9.0.0",
-    "lodash": "^4.17.21"
+    "vue": "^3.3.4"
   },
   "devDependencies": {
-    "@vitejs/plugin-vue": "^5.0.0",
-    "vite": "^5.0.0",
-    "tailwindcss": "^3.4.0",
-    "autoprefixer": "^10.4.16",
-    "postcss": "^8.4.32"
+    "@vitejs/plugin-vue": "^4.2.3",
+    "vite": "^4.5.9",
+    "tailwindcss": "^3.3.3",
+    "autoprefixer": "^10.4.14"
   }
 }

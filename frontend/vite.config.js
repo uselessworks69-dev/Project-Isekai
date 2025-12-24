@@ -4,14 +4,15 @@ import { resolve } from 'path'
 
 export default defineConfig({
   plugins: [vue()],
-  root: '.',      // IMPORTANT: this folder is root
-  base: './',     // relative paths for static deploy
+  root: '.',                  // frontend folder
+  base: './',                 // relative paths for static deployment
+  build: {
+    outDir: 'dist',           // output directory
+    rollupOptions: {
+      input: resolve(__dirname, 'public/index.html')  // <- THIS FIXES THE ERROR
+    }
+  },
   resolve: {
     alias: { '@': resolve(__dirname, 'src') }
-  },
-  css: {
-    postcss: {
-      plugins: [require('tailwindcss'), require('autoprefixer')]
-    }
   }
 })

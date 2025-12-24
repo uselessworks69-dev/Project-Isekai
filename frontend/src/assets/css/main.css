@@ -1,0 +1,284 @@
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
+
+/* Solo Leveling Digital UI Theme */
+:root {
+  --system-blue: #00b4ff;
+  --system-purple: #9d4edd;
+  --system-red: #ff375f;
+  --system-gold: #ffd700;
+  --system-gray: #1a1a2e;
+}
+
+body {
+  background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 50%, #16213e 100%);
+  background-attachment: fixed;
+  font-family: 'Segoe UI', 'Noto Sans', sans-serif;
+}
+
+/* Digital Glitch Effects */
+@keyframes glitch {
+  0% { clip-path: inset(40% 0 61% 0); transform: translate(-2px, 2px); }
+  20% { clip-path: inset(92% 0 1% 0); transform: translate(2px, -2px); }
+  40% { clip-path: inset(43% 0 1% 0); transform: translate(-2px, 2px); }
+  60% { clip-path: inset(25% 0 58% 0); transform: translate(2px, -2px); }
+  80% { clip-path: inset(54% 0 7% 0); transform: translate(-2px, 2px); }
+  100% { clip-path: inset(58% 0 43% 0); transform: translate(0); }
+}
+
+@keyframes text-glitch {
+  0% { transform: translate(0); }
+  20% { transform: translate(-2px, 2px); text-shadow: 2px 0 #ff375f; }
+  40% { transform: translate(2px, -1px); text-shadow: -2px 0 #00b4ff; }
+  60% { transform: translate(-1px, 1px); }
+  80% { transform: translate(1px, -2px); }
+  100% { transform: translate(0); }
+}
+
+@keyframes aura-pulse {
+  0%, 100% { 
+    box-shadow: 0 0 20px rgba(0, 180, 255, 0.3),
+                0 0 40px rgba(157, 78, 221, 0.2);
+  }
+  50% { 
+    box-shadow: 0 0 30px rgba(0, 180, 255, 0.6),
+                0 0 60px rgba(157, 78, 221, 0.4),
+                0 0 90px rgba(255, 215, 0, 0.2);
+  }
+}
+
+@keyframes reiatsu-flow {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* UI Components */
+.system-card {
+  background: rgba(26, 26, 46, 0.8);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(0, 180, 255, 0.2);
+  border-radius: 12px;
+  transition: all 0.3s ease;
+}
+
+.system-card:hover {
+  border-color: var(--system-blue);
+  box-shadow: 0 0 20px rgba(0, 180, 255, 0.2);
+}
+
+.stat-display {
+  background: linear-gradient(135deg, rgba(0, 180, 255, 0.1), rgba(157, 78, 221, 0.1));
+  border-left: 4px solid var(--system-blue);
+}
+
+.rank-badge {
+  background: linear-gradient(135deg, #1a1a2e, #16213e);
+  border: 2px solid;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  font-weight: 800;
+}
+
+/* Rank-specific colors */
+.rank-f { border-color: #6b7280; color: #6b7280; }
+.rank-e { border-color: #9ca3af; color: #9ca3af; }
+.rank-d { border-color: #10b981; color: #10b981; }
+.rank-c { border-color: #3b82f6; color: #3b82f6; }
+.rank-b { border-color: #8b5cf6; color: #8b5cf6; }
+.rank-a { border-color: #ef4444; color: #ef4444; text-shadow: 0 0 10px rgba(239, 68, 68, 0.5); }
+.rank-s { border-color: #f59e0b; color: #f59e0b; text-shadow: 0 0 15px rgba(245, 158, 11, 0.7); }
+.rank-ss { 
+  border-color: #f97316; 
+  color: #f97316;
+  background: linear-gradient(135deg, rgba(249, 115, 22, 0.1), rgba(245, 158, 11, 0.1));
+  animation: aura-pulse 2s infinite;
+}
+.rank-sss {
+  border-color: var(--system-gold);
+  color: var(--system-gold);
+  background: linear-gradient(135deg, 
+    rgba(255, 215, 0, 0.1), 
+    rgba(255, 106, 0, 0.1),
+    rgba(255, 215, 0, 0.1));
+  animation: aura-pulse 1.5s infinite, reiatsu-flow 3s infinite;
+  text-shadow: 0 0 20px rgba(255, 215, 0, 0.8);
+}
+
+/* Fallen State Effects */
+.fallen-state {
+  position: relative;
+  animation: glitch 0.5s infinite;
+  color: #ff375f;
+  text-shadow: 0 0 10px rgba(255, 55, 95, 0.7);
+}
+
+.fallen-state::before {
+  content: '';
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  right: -2px;
+  bottom: -2px;
+  background: linear-gradient(45deg, 
+    transparent, 
+    rgba(255, 55, 95, 0.1), 
+    transparent,
+    rgba(157, 78, 221, 0.1),
+    transparent);
+  z-index: -1;
+  border-radius: inherit;
+}
+
+/* Gauntlet Progress Bars */
+.gauntlet-progress {
+  height: 8px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.gauntlet-progress-fill {
+  height: 100%;
+  transition: width 0.5s ease;
+  border-radius: 4px;
+}
+
+.push-progress { background: linear-gradient(90deg, #ef4444, #f97316); }
+.pull-progress { background: linear-gradient(90deg, #3b82f6, #8b5cf6); }
+.legs-progress { background: linear-gradient(90deg, #10b981, #06b6d4); }
+.core-progress { background: linear-gradient(90deg, #8b5cf6, #ec4899); }
+
+/* Button Styles */
+.system-btn {
+  background: linear-gradient(135deg, var(--system-blue), var(--system-purple));
+  border: none;
+  color: white;
+  font-weight: 600;
+  padding: 10px 20px;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.system-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 20px rgba(0, 180, 255, 0.3);
+}
+
+.system-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.system-btn-danger {
+  background: linear-gradient(135deg, #ff375f, #dc2626);
+}
+
+.system-btn-warning {
+  background: linear-gradient(135deg, #f59e0b, #d97706);
+}
+
+.system-btn-success {
+  background: linear-gradient(135deg, #10b981, #059669);
+}
+
+/* Notification Popups */
+.system-notification {
+  background: rgba(26, 26, 46, 0.95);
+  border-left: 4px solid var(--system-blue);
+  backdrop-filter: blur(10px);
+  animation: slide-in 0.3s ease;
+}
+
+@keyframes slide-in {
+  from { transform: translateX(100%); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+
+/* Constellation Sigils */
+.constellation-sigil {
+  position: relative;
+  width: 120px;
+  height: 120px;
+  background: radial-gradient(circle, 
+    rgba(0, 180, 255, 0.1) 0%,
+    rgba(157, 78, 221, 0.05) 50%,
+    transparent 70%);
+}
+
+.constellation-sigil::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 80%;
+  height: 80%;
+  background: conic-gradient(
+    from 0deg,
+    transparent,
+    var(--system-blue),
+    var(--system-purple),
+    transparent
+  );
+  border-radius: 50%;
+  animation: rotate 10s linear infinite;
+  filter: blur(10px);
+  opacity: 0.3;
+}
+
+@keyframes rotate {
+  from { transform: translate(-50%, -50%) rotate(0deg); }
+  to { transform: translate(-50%, -50%) rotate(360deg); }
+}
+
+/* Dungeon Interface */
+.dungeon-arena {
+  background: linear-gradient(135deg, 
+    rgba(15, 15, 35, 0.9),
+    rgba(26, 26, 46, 0.9));
+  border: 2px solid;
+  border-image: linear-gradient(45deg, var(--system-blue), var(--system-purple)) 1;
+  position: relative;
+}
+
+.dungeon-arena::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: 
+    radial-gradient(circle at 20% 80%, rgba(0, 180, 255, 0.1) 0%, transparent 50%),
+    radial-gradient(circle at 80% 20%, rgba(157, 78, 221, 0.1) 0%, transparent 50%);
+  pointer-events: none;
+}
+
+/* Scrollbar Styling */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(26, 26, 46, 0.5);
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(var(--system-blue), var(--system-purple));
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(var(--system-purple), var(--system-blue));
+}
+
+/* Selection Color */
+::selection {
+  background: rgba(0, 180, 255, 0.3);
+  color: white;
+  }

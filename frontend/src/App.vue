@@ -128,7 +128,6 @@ import PurificationArc from '@/components/progression/PurificationArc.vue'
 import PromotionTest from '@/components/progression/PromotionTest.vue'
 import SponsorTasks from '@/components/economy/SponsorTasks.vue'
 import ConstellationShop from '@/components/economy/ConstellationShop.vue'
-import NotificationSystem from '@/components/core/NotificationSystem.vue'
 
 const router = useRouter()
 

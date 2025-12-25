@@ -1,9 +1,16 @@
+// frontend/src/services/api.js
 import axios from 'axios';
+
+// Build a safe API base URL that always ends up like:
+//   https://project-isekai-backend.onrender.com/api
+const API_ROOT = import.meta.env.VITE_API_URL || 'http://localhost:3000';
+const BASE_API = API_ROOT.replace(/\/$/, '') + '/api';
 
 // Create axios instance
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || 'http://localhost:3000/api',
+  baseURL: BASE_API,
   timeout: 10000,
+  withCredentials: true, // backend uses credentials in CORS config
   headers: {
     'Content-Type': 'application/json'
   }
@@ -14,51 +21,51 @@ api.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem('isekai_token');
     if (token) {
+      config.headers = config.headers || {};
       config.headers.Authorization = `Bearer ${token}`;
     }
     return config;
   },
-  (error) => {
-    return Promise.reject(error);
-  }
+  (error) => Promise.reject(error)
 );
 
 // Response interceptor for handling errors
 api.interceptors.response.use(
-  (response) => response.data,
+  (response) => response.data, // we return response.data directly everywhere
   (error) => {
     if (error.response) {
       // Server responded with error
       const { status, data } = error.response;
-      
+      const message = data?.error?.message || data?.message || 'Unknown server error';
+
       switch (status) {
         case 401:
           // Token expired or invalid
           localStorage.removeItem('isekai_token');
           localStorage.removeItem('isekai_user');
-          window.location.href = '/login';
+          // avoid redirecting if already on login page
+          if (typeof window !== 'undefined' && window.location.pathname !== '/login') {
+            window.location.href = '/login';
+          }
           break;
-          
+
         case 403:
-          // Forbidden
-          console.error('Forbidden:', data.error?.message);
+          console.error('Forbidden:', message);
           break;
-          
+
         case 404:
-          // Not found
-          console.error('Not found:', data.error?.message);
+          console.error('Not found:', message);
           break;
-          
+
         case 429:
-          // Rate limited
-          console.error('Rate limited:', data.error?.message);
+          console.error('Rate limited:', message);
           break;
-          
+
         default:
-          console.error('API Error:', data.error?.message);
+          console.error('API Error:', message);
       }
-      
-      return Promise.reject(data.error || error);
+
+      return Promise.reject(data?.error || { type: 'API_ERROR', message });
     } else if (error.request) {
       // Request made but no response
       console.error('Network error:', error.message);
@@ -80,10 +87,10 @@ export const authAPI = {
   login: (identifier, password) => api.post('/auth/login', { identifier, password }),
   logout: () => api.post('/auth/logout'),
   refreshToken: () => api.post('/auth/refresh'),
-  
+
   // Password reset
   requestPasswordReset: (email) => api.post('/auth/password-reset-request', { email }),
-  confirmPasswordReset: (token, newPassword) => 
+  confirmPasswordReset: (token, newPassword) =>
     api.post('/auth/password-reset-confirm', { token, new_password: newPassword })
 };
 
@@ -91,11 +98,11 @@ export const authAPI = {
 export const progressAPI = {
   getProgress: () => api.get('/progress'),
   updateCharacter: (updates) => api.put('/progress/character', { updates }),
-  
+
   // Challenges
-  completeChallenge: (challengeId, xpEarned, details) => 
+  completeChallenge: (challengeId, xpEarned, details) =>
     api.post('/progress/challenges/complete', { challenge_id: challengeId, xp_earned: xpEarned, details }),
-  
+
   // Gauntlets
   completeGauntletStage: (gauntletType, stage, xpEarned, isBoss, bossBonus) =>
     api.post(`/progress/gauntlets/${gauntletType}/stages/${stage}/complete`, {
@@ -103,14 +110,14 @@ export const progressAPI = {
       is_boss: isBoss,
       boss_bonus: bossBonus
     }),
-  
+
   // Constellations
   getAvailableConstellations: () => api.get('/progress/constellations/available'),
   acceptConstellation: (constellationId) => api.post(`/progress/constellations/${constellationId}/accept`),
-  
+
   // Purification
   startPurification: () => api.post('/progress/purification/start'),
-  completePurificationPhase: (phase, data) => 
+  completePurificationPhase: (phase, data) =>
     api.post(`/progress/purification/phase/${phase}/complete`, data)
 };
 
@@ -118,13 +125,13 @@ export const progressAPI = {
 export const dungeonAPI = {
   requestDungeon: () => api.post('/dungeons/request'),
   getActiveDungeon: () => api.get('/dungeons/active'),
-  completeDungeon: (dungeonId, success, data) => 
+  completeDungeon: (dungeonId, success, data) =>
     api.post(`/dungeons/${dungeonId}/complete`, { success, ...data }),
   abandonDungeon: (dungeonId) => api.post(`/dungeons/${dungeonId}/abandon`),
-  getDungeonHistory: (page = 1, limit = 20) => 
+  getDungeonHistory: (page = 1, limit = 20) =>
     api.get('/dungeons/history', { params: { page, limit } }),
   getDungeonStatistics: () => api.get('/dungeons/statistics'),
-  
+
   // Promotion
   generatePromotionDungeon: () => api.post('/dungeons/promotion/generate')
 };
@@ -132,10 +139,10 @@ export const dungeonAPI = {
 // Shop API
 export const shopAPI = {
   getShopItems: () => api.get('/shop/items'),
-  purchaseItem: (itemId, quantity = 1) => 
+  purchaseItem: (itemId, quantity = 1) =>
     api.post('/shop/purchase', { item_id: itemId, quantity }),
   getInventory: () => api.get('/shop/inventory'),
-  useItem: (itemId, context) => 
+  useItem: (itemId, context) =>
     api.post('/shop/inventory/use', { item_id: itemId, context })
 };
 
@@ -147,7 +154,7 @@ export class GameState {
     this.activeDungeon = null;
     this.listeners = new Set();
   }
-  
+
   // Singleton pattern
   static getInstance() {
     if (!GameState.instance) {
@@ -155,20 +162,20 @@ export class GameState {
     }
     return GameState.instance;
   }
-  
+
   // Initialize from stored data
   async initialize() {
     const token = localStorage.getItem('isekai_token');
     const userData = localStorage.getItem('isekai_user');
-    
+
     if (token && userData) {
       try {
         this.user = JSON.parse(userData);
-        
+
         // Load progress
         const progressData = await progressAPI.getProgress();
         this.progress = progressData.progress;
-        
+
         // Load active dungeon
         try {
           const dungeonData = await dungeonAPI.getActiveDungeon();
@@ -177,7 +184,7 @@ export class GameState {
           // No active dungeon is okay
           this.activeDungeon = null;
         }
-        
+
         this.notifyListeners();
         return true;
       } catch (error) {
@@ -186,27 +193,27 @@ export class GameState {
         return false;
       }
     }
-    
+
     return false;
   }
-  
+
   // Update methods
   async updateUser(userData) {
     this.user = userData;
     localStorage.setItem('isekai_user', JSON.stringify(userData));
     this.notifyListeners();
   }
-  
+
   async updateProgress(progressData) {
     this.progress = progressData;
     this.notifyListeners();
   }
-  
+
   async updateActiveDungeon(dungeonData) {
     this.activeDungeon = dungeonData;
     this.notifyListeners();
   }
-  
+
   // Game actions
   async completeChallenge(challengeData) {
     try {
@@ -215,21 +222,21 @@ export class GameState {
         challengeData.xp,
         challengeData.details
       );
-      
+
       // Update local state
       if (this.progress) {
         this.progress.statistics.total_challenges_completed = result.progress.challenges_completed;
         this.progress.dungeon_keys = result.progress.dungeon_keys;
         this.progress.statistics.current_streak = result.progress.streak;
       }
-      
+
       // Update user character data
       if (this.user) {
         this.user.character_data.xp.total += challengeData.xp;
         this.user.character_data.challenges_completed += 1;
         this.user.character_data.dungeon_keys = result.progress.dungeon_keys;
       }
-      
+
       this.notifyListeners();
       return result;
     } catch (error) {
@@ -237,7 +244,7 @@ export class GameState {
       throw error;
     }
   }
-  
+
   async completeGauntletStage(gauntletType, stageData) {
     try {
       const result = await progressAPI.completeGauntletStage(
@@ -247,23 +254,23 @@ export class GameState {
         stageData.isBoss,
         stageData.bossBonus
       );
-      
+
       // Update local state
       if (this.progress && this.progress.gauntlet_progress[gauntletType]) {
         this.progress.gauntlet_progress[gauntletType] = result.progress;
       }
-      
+
       // Update user character data
       if (this.user) {
         this.user.character_data.gauntlet_stages[gauntletType] = result.progress.current_stage;
         this.user.character_data.xp.total += stageData.xp;
         this.user.character_data.xp[gauntletType] += stageData.xp;
-        
+
         if (stageData.isBoss) {
           this.user.character_data.int += 1;
         }
       }
-      
+
       this.notifyListeners();
       return result;
     } catch (error) {
@@ -271,13 +278,13 @@ export class GameState {
       throw error;
     }
   }
-  
+
   async requestDungeon() {
     try {
       const result = await dungeonAPI.requestDungeon();
       this.activeDungeon = result.dungeon;
       this.progress.dungeon_keys = result.dungeon.keys_remaining;
-      
+
       this.notifyListeners();
       return result;
     } catch (error) {
@@ -285,24 +292,24 @@ export class GameState {
       throw error;
     }
   }
-  
+
   // Listener pattern
   addListener(listener) {
     this.listeners.add(listener);
   }
-  
+
   removeListener(listener) {
     this.listeners.delete(listener);
   }
-  
+
   notifyListeners() {
-    this.listeners.forEach(listener => {
+    this.listeners.forEach((listener) => {
       if (typeof listener === 'function') {
         listener(this.getState());
       }
     });
   }
-  
+
   getState() {
     return {
       user: this.user,
@@ -310,7 +317,7 @@ export class GameState {
       activeDungeon: this.activeDungeon
     };
   }
-  
+
   clear() {
     this.user = null;
     this.progress = null;
